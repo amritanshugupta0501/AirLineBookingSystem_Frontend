@@ -1,0 +1,18 @@
+<nav class="navbar glass-panel">
+  <div class="container nav-container">
+    <div class="logo" routerLink="/">
+      <span class="icon">✈️</span>
+      <span class="brand">AeroFlight</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/search" routerLinkActive="active">Search Flights</a>
+      <!-- Add auth links later -->
+      <a routerLink="/login" class="btn btn-primary" style="padding: 8px 16px;">Sign In</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container main-content">
+  <router-outlet></router-outlet>
+</main>

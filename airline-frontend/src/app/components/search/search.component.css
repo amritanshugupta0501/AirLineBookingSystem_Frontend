@@ -1,0 +1,144 @@
+.search-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.flight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.flight-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flight-card:hover {
+  transform: scale(1.02);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.flight-info {
+  flex: 1;
+}
+
+.airline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.airline .name {
+  color: var(--accent);
+}
+
+.airline .flight-no {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  background: rgba(255,255,255,0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.route-details {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.location h4 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+
+.location p {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.location.right {
+  text-align: right;
+}
+
+.duration {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--text-muted);
+}
+
+.duration .line {
+  height: 2px;
+  width: 100%;
+  background: var(--panel-border);
+  position: absolute;
+  z-index: 1;
+}
+
+.duration .icon {
+  background: var(--panel-bg);
+  padding: 0 8px;
+  z-index: 2;
+  font-size: 1.2rem;
+}
+
+.flight-action {
+  text-align: right;
+  padding-left: 32px;
+  border-left: 1px solid var(--panel-border);
+  min-width: 180px;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.seats-left {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .flight-card {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .flight-action {
+    border-left: none;
+    border-top: 1px solid var(--panel-border);
+    padding-left: 0;
+    padding-top: 24px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .seats-left {
+    margin-bottom: 0;
+  }
+}

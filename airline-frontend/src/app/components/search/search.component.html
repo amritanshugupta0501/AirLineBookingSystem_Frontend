@@ -1,0 +1,45 @@
+<div class="search-header animate-fade-in">
+  <h2>Flight Results</h2>
+  <p *ngIf="loading" class="text-muted">Searching for the best flights...</p>
+  <p *ngIf="!loading && flights.length > 0" class="text-muted">
+    Found {{ flights.length }} flights from <span class="highlight">{{ origin }}</span> to <span class="highlight">{{ destination }}</span>
+  </p>
+  <p *ngIf="!loading && flights.length === 0" class="text-muted">
+    No flights found for this route on the selected date.
+  </p>
+</div>
+
+<div class="flight-list animate-fade-in" style="animation-delay: 0.1s;" *ngIf="!loading">
+  <div class="flight-card glass-panel" *ngFor="let flight of flights">
+    <div class="flight-info">
+      <div class="airline">
+        <span class="icon">🛫</span>
+        <span class="name">{{ flight.airline }}</span>
+        <span class="flight-no">{{ flight.flightNumber }}</span>
+      </div>
+      
+      <div class="route-details">
+        <div class="location">
+          <h4>{{ flight.departureDate | date:'shortTime' }}</h4>
+          <p>{{ flight.origin }}</p>
+        </div>
+        
+        <div class="duration">
+          <div class="line"></div>
+          <span class="icon">✈️</span>
+        </div>
+        
+        <div class="location right">
+          <h4>{{ flight.arrivalDate | date:'shortTime' }}</h4>
+          <p>{{ flight.destination }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flight-action">
+      <div class="price">${{ flight.price }}</div>
+      <p class="seats-left">{{ flight.seatsAvailable }} seats left</p>
+      <button class="btn btn-primary" (click)="bookFlight(flight)">Book Now</button>
+    </div>
+  </div>
+</div>

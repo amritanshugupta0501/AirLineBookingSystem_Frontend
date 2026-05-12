@@ -1,0 +1,52 @@
+<div class="booking-container animate-fade-in">
+  
+  <div class="glass-panel booking-panel" *ngIf="!success">
+    <h2>Complete Your Booking</h2>
+    <p class="text-muted mb-4">Please enter passenger details for Flight ID: <span class="highlight">{{ flightId }}</span></p>
+    
+    <div *ngIf="error" class="alert alert-error">
+      {{ error }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #bookingForm="ngForm">
+      <div class="input-row">
+        <div class="input-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="passenger.firstName" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="passenger.lastName" required>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label for="passport">Passport Number</label>
+        <input type="text" id="passport" name="passport" [(ngModel)]="passenger.passportNumber" required>
+      </div>
+      
+      <div class="payment-mockup mt-4">
+        <h4>Payment Information</h4>
+        <p class="text-muted text-small">This is a secure mock payment. No real card needed.</p>
+        <div class="input-group mt-2">
+          <label>Card Number</label>
+          <input type="text" value="**** **** **** 4242" disabled>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full mt-4" [disabled]="!bookingForm.form.valid || loading">
+        {{ loading ? 'Processing...' : 'Confirm Booking' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="glass-panel success-panel animate-fade-in" *ngIf="success">
+    <div class="success-icon">🎉</div>
+    <h2>Booking Confirmed!</h2>
+    <p class="text-muted mb-2">Your flight has been successfully booked.</p>
+    <p class="text-muted mb-4"><small>A confirmation email has been sent to your registered address.</small></p>
+    <a routerLink="/" class="btn btn-primary">Return to Home</a>
+  </div>
+
+</div>

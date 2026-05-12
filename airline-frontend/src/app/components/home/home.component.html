@@ -1,0 +1,47 @@
+<div class="hero animate-fade-in">
+  <div class="hero-content text-center">
+    <h1 class="hero-title">Experience the Joy of Flying</h1>
+    <p class="hero-subtitle">Book your next adventure with our premium airline network.</p>
+  </div>
+  
+  <div class="search-widget glass-panel">
+    <form (ngSubmit)="onSearch()" #searchForm="ngForm" class="search-grid">
+      <div class="input-group">
+        <label for="origin">From</label>
+        <input type="text" id="origin" name="origin" [(ngModel)]="searchCriteria.origin" placeholder="Origin City (e.g., JFK)" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="destination">To</label>
+        <input type="text" id="destination" name="destination" [(ngModel)]="searchCriteria.destination" placeholder="Destination (e.g., LHR)" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="date">Departure Date</label>
+        <input type="date" id="date" name="date" [(ngModel)]="searchCriteria.date" required>
+      </div>
+      
+      <div class="input-group search-btn-group">
+        <button type="submit" class="btn btn-primary w-full" [disabled]="!searchForm.form.valid">Search Flights</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="features-section animate-fade-in" style="animation-delay: 0.2s;">
+  <div class="feature-card glass-panel">
+    <div class="feature-icon">✨</div>
+    <h3>Premium Service</h3>
+    <p>Enjoy world-class hospitality and comfort on every single flight.</p>
+  </div>
+  <div class="feature-card glass-panel">
+    <div class="feature-icon">⚡</div>
+    <h3>Instant Booking</h3>
+    <p>Our microservices architecture ensures lightning-fast reservations.</p>
+  </div>
+  <div class="feature-card glass-panel">
+    <div class="feature-icon">🛡️</div>
+    <h3>Secure Payments</h3>
+    <p>Your transactions are protected by industry-leading security.</p>
+  </div>
+</div>
