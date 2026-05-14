@@ -1,0 +1,99 @@
+<div class="dashboard-container animate-fade-in">
+  
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-title">
+        <h1>🛂 Staff Operations Center</h1>
+        <p class="text-muted">Manage flight schedules, manifests, and system operations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    
+    <!-- SCHEDULE FLIGHT FORM -->
+    <div class="glass-panel form-panel">
+      <h2><span class="icon">✈️</span> Schedule New Flight</h2>
+      
+      <div *ngIf="error" class="alert alert-error">⚠️ {{ error }}</div>
+      <div *ngIf="success" class="alert alert-success">✅ {{ success }}</div>
+
+      <form (ngSubmit)="onScheduleFlight()" #scheduleForm="ngForm" class="schedule-form">
+        <div class="input-group">
+          <label for="flightNumber">Flight Number</label>
+          <input type="text" id="flightNumber" name="flightNumber" [(ngModel)]="newFlight.flightNumber" placeholder="e.g. AA101" required>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label for="origin">Origin</label>
+            <input type="text" id="origin" name="origin" [(ngModel)]="newFlight.origin" placeholder="e.g. JFK" required>
+          </div>
+          <div class="input-group">
+            <label for="destination">Destination</label>
+            <input type="text" id="destination" name="destination" [(ngModel)]="newFlight.destination" placeholder="e.g. LAX" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label for="departureTime">Departure Time</label>
+            <input type="datetime-local" id="departureTime" name="departureTime" [(ngModel)]="newFlight.departureTime" required>
+          </div>
+          <div class="input-group">
+            <label for="arrivalTime">Arrival Time</label>
+            <input type="datetime-local" id="arrivalTime" name="arrivalTime" [(ngModel)]="newFlight.arrivalTime" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full mt-4" [disabled]="!scheduleForm.form.valid || loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Scheduling...' : 'Confirm Schedule' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- FLIGHTS LIST -->
+    <div class="glass-panel list-panel">
+      <div class="list-header">
+        <h2>Active Flight Schedules</h2>
+        <button class="btn-refresh" (click)="loadFlights()" title="Refresh">🔄</button>
+      </div>
+
+      <div *ngIf="loadingFlights" class="loading-state">
+        <span class="spinner large"></span>
+        <p>Loading active flights...</p>
+      </div>
+
+      <div *ngIf="!loadingFlights && flights.length === 0" class="empty-state">
+        <p>No flights scheduled yet.</p>
+      </div>
+
+      <div class="table-container" *ngIf="!loadingFlights && flights.length > 0">
+        <table class="flight-table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Route</th>
+              <th>Departure</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of flights">
+              <td><strong>{{ f.flightNumber }}</strong></td>
+              <td>{{ f.origin }} → {{ f.destination }}</td>
+              <td>{{ f.departureTime | date:'short' }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="f.status.toLowerCase()">
+                  {{ f.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

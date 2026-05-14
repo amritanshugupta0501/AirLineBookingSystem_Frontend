@@ -1,30 +1,174 @@
 <div class="auth-container animate-fade-in">
   <div class="glass-panel auth-panel">
-    <h2>Welcome Back</h2>
-    <p class="text-muted mb-4">Sign in to manage your bookings</p>
-    
-    <div *ngIf="error" class="alert alert-error">
-      {{ error }}
+
+    <!-- Header -->
+    <div class="auth-header">
+      <div class="auth-logo">✈️</div>
+      <h2>{{ mode === 'login' ? 'Welcome Back' :
+           mode === 'register' ? 'Create Account' :
+           mode === 'staff-login' ? 'Staff Portal' : 'Staff Registration' }}</h2>
+      <p class="text-muted">
+        {{ mode === 'login' ? 'Sign in to manage your bookings' :
+           mode === 'register' ? 'Join AeroFlight today' :
+           mode === 'staff-login' ? 'Airline staff & admin access' :
+           'Register a new staff account' }}
+      </p>
     </div>
 
-    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <!-- Main Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab" [class.active]="mode === 'login'" (click)="setMode('login')" id="tab-login">
+        Sign In
+      </button>
+      <button class="auth-tab" [class.active]="mode === 'register'" (click)="setMode('register')" id="tab-register">
+        Register
+      </button>
+      <button class="auth-tab auth-tab-staff" [class.active]="mode === 'staff-login' || mode === 'staff-register'" (click)="setMode('staff-login')" id="tab-staff">
+        🛂 Staff
+      </button>
+    </div>
+
+    <!-- Alerts -->
+    <div *ngIf="error" class="alert alert-error" id="auth-error">⚠️ {{ error }}</div>
+    <div *ngIf="success" class="alert alert-success" id="auth-success">✅ {{ success }}</div>
+
+    <!-- ======================== LOGIN FORM ======================== -->
+    <form *ngIf="mode === 'login'" (ngSubmit)="onLogin()" #loginForm="ngForm" id="form-login">
       <div class="input-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" [(ngModel)]="credentials.username" required>
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" name="username"
+               [(ngModel)]="credentials.username" placeholder="Enter your username" required>
       </div>
-      
       <div class="input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="credentials.password" required>
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password"
+               [(ngModel)]="credentials.password" placeholder="Enter your password" required>
       </div>
-      
-      <button type="submit" class="btn btn-primary w-full mt-4" [disabled]="!loginForm.form.valid || loading">
+      <button type="submit" class="btn btn-primary w-full mt-4" id="btn-login"
+              [disabled]="!loginForm.form.valid || loading">
+        <span *ngIf="loading" class="spinner"></span>
         {{ loading ? 'Signing in...' : 'Sign In' }}
       </button>
+      <div class="divider"><span>or continue with</span></div>
+      <button type="button" class="btn-google w-full" (click)="loginWithGoogle()" id="btn-google-login">
+        <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <div class="auth-hint">
+        <p><strong>Demo:</strong> username: <code>user</code> / password: <code>password</code></p>
+      </div>
     </form>
-    
-    <div class="auth-links">
-      <p>Don't have an account? <a href="#">Register</a></p>
-    </div>
+
+    <!-- ======================== REGISTER FORM ======================== -->
+    <form *ngIf="mode === 'register'" (ngSubmit)="onRegister()" #registerForm="ngForm" id="form-register">
+      <div class="input-group">
+        <label for="reg-username">Username</label>
+        <input type="text" id="reg-username" name="regUsername"
+               [(ngModel)]="registerData.username" placeholder="Choose a username" required>
+      </div>
+      <div class="input-group">
+        <label for="reg-email">Email <span class="optional">(optional)</span></label>
+        <input type="email" id="reg-email" name="regEmail"
+               [(ngModel)]="registerData.email" placeholder="your@email.com">
+      </div>
+      <div class="input-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" name="regPassword"
+               [(ngModel)]="registerData.password" placeholder="Create a password" required>
+      </div>
+      <div class="input-group">
+        <label for="reg-confirm">Confirm Password</label>
+        <input type="password" id="reg-confirm" name="regConfirm"
+               [(ngModel)]="registerData.confirmPassword" placeholder="Confirm your password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-full mt-4" id="btn-register"
+              [disabled]="!registerForm.form.valid || loading">
+        <span *ngIf="loading" class="spinner"></span>
+        {{ loading ? 'Creating account...' : 'Create Account' }}
+      </button>
+      <div class="divider"><span>or</span></div>
+      <button type="button" class="btn-google w-full" (click)="loginWithGoogle()" id="btn-google-register">
+        <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Register with Google
+      </button>
+    </form>
+
+    <!-- ======================== STAFF SECTION ======================== -->
+    <ng-container *ngIf="mode === 'staff-login' || mode === 'staff-register'">
+
+      <!-- Staff Sub-Tabs -->
+      <div class="staff-subtabs">
+        <button class="staff-subtab" [class.active]="mode === 'staff-login'"
+                (click)="setMode('staff-login')" id="subtab-staff-login">Login</button>
+        <button class="staff-subtab" [class.active]="mode === 'staff-register'"
+                (click)="setMode('staff-register')" id="subtab-staff-register">Register</button>
+      </div>
+
+      <!-- Staff Login Form -->
+      <form *ngIf="mode === 'staff-login'" (ngSubmit)="onStaffLogin()" #staffForm="ngForm" id="form-staff-login">
+        <div class="staff-badge">🛂 Authorized Personnel Only</div>
+        <div class="input-group">
+          <label for="staff-username">Staff Username</label>
+          <input type="text" id="staff-username" name="staffUsername"
+                 [(ngModel)]="staffCredentials.username" placeholder="Enter staff username" required>
+        </div>
+        <div class="input-group">
+          <label for="staff-password">Staff Password</label>
+          <input type="password" id="staff-password" name="staffPassword"
+                 [(ngModel)]="staffCredentials.password" placeholder="Enter staff password" required>
+        </div>
+        <button type="submit" class="btn btn-staff w-full mt-4" id="btn-staff-login"
+                [disabled]="!staffForm.form.valid || loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Authenticating...' : '🔐 Staff Login' }}
+        </button>
+        <div class="auth-hint">
+          <p><strong>Demo staff:</strong> <code>staff</code> / <code>password</code></p>
+          <p><strong>Demo admin:</strong> <code>admin</code> / <code>password</code></p>
+        </div>
+      </form>
+
+      <!-- Staff Register Form -->
+      <form *ngIf="mode === 'staff-register'" (ngSubmit)="onStaffRegister()" #staffRegForm="ngForm" id="form-staff-register">
+        <div class="staff-badge">🛂 Register a new staff account</div>
+        <div class="input-group">
+          <label for="sreg-username">Username</label>
+          <input type="text" id="sreg-username" name="sregUsername"
+                 [(ngModel)]="staffRegisterData.username" placeholder="Choose a username" required>
+        </div>
+        <div class="input-group">
+          <label for="sreg-email">Email <span class="optional">(optional)</span></label>
+          <input type="email" id="sreg-email" name="sregEmail"
+                 [(ngModel)]="staffRegisterData.email" placeholder="staff@airline.com">
+        </div>
+        <div class="input-group">
+          <label for="sreg-password">Password</label>
+          <input type="password" id="sreg-password" name="sregPassword"
+                 [(ngModel)]="staffRegisterData.password" placeholder="Create a password" required>
+        </div>
+        <div class="input-group">
+          <label for="sreg-confirm">Confirm Password</label>
+          <input type="password" id="sreg-confirm" name="sregConfirm"
+                 [(ngModel)]="staffRegisterData.confirmPassword" placeholder="Confirm your password" required>
+        </div>
+        <button type="submit" class="btn btn-staff w-full mt-4" id="btn-staff-register"
+                [disabled]="!staffRegForm.form.valid || loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Registering...' : '✅ Register as Staff' }}
+        </button>
+      </form>
+
+    </ng-container>
+
   </div>
 </div>

@@ -5,10 +5,22 @@
       <span class="brand">AeroFlight</span>
     </div>
     <div class="nav-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a routerLink="/search" routerLinkActive="active">Search Flights</a>
-      <!-- Add auth links later -->
-      <a routerLink="/login" class="btn btn-primary" style="padding: 8px 16px;">Sign In</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" id="nav-home">Home</a>
+      <a routerLink="/search" routerLinkActive="active" id="nav-search">Search Flights</a>
+
+      <!-- When NOT logged in -->
+      <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/login" class="btn btn-primary" style="padding: 8px 16px;" id="nav-signin">Sign In</a>
+      </ng-container>
+
+      <!-- When logged in -->
+      <ng-container *ngIf="isLoggedIn">
+        <a *ngIf="isStaff" routerLink="/staff-dashboard" routerLinkActive="active" id="nav-staff">Staff Portal</a>
+        <span class="user-badge" id="nav-user-badge">{{ getRoleLabel() }}</span>
+        <button class="btn btn-outline" (click)="logout()" id="nav-logout" style="padding: 8px 16px;">
+          Sign Out
+        </button>
+      </ng-container>
     </div>
   </div>
 </nav>
