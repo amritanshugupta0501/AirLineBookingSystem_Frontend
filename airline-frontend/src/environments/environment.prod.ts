@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiGatewayUrl: 'https://airline-api-gateway-8tcr.onrender.com'
+  apiGatewayUrl: 'https://airline-api-gateway-lvie.onrender.com'
 };
